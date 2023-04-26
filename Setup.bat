@@ -11,7 +11,7 @@ set GRPC_PROGRAMS_DIR=%SCRIPT_FOLDER%\GrpcPrograms\Win64
 set CMAKE_BUILD_DIR=%GRPC_ROOT%\.build
 
 set REMOTE_ORIGIN=https://github.com/grpc/grpc.git
-set BRANCH=v1.23.x
+set BRANCH=v1.54.x
 ::#####################################VARS#############################################################################
 
 :GET_UE_ROOT
@@ -39,8 +39,14 @@ call cmake .. -G "Visual Studio 16 2019" -A x64 ^
     -DCMAKE_CXX_STANDARD_LIBRARIES="Crypt32.Lib User32.lib Advapi32.lib" ^
     -DCMAKE_BUILD_TYPE=Release ^
     -DCMAKE_CONFIGURATION_TYPES=Release ^
-    -Dprotobuf_BUILD_TESTS=OFF ^
-    -DgRPC_ZLIB_PROVIDER=package ^
+	-DgRPC_PROTOBUF_PROVIDER=package ^
+	-DgRPC_PROTOBUF_PACKAGE_TYPE=module ^
+	-DProtobuf_USE_STATIC_LIBS=ON ^
+	-DProtobuf_INCLUDE_DIR="%UE_ROOT%\Engine\Plugins\AnteMotion\Protobuf\Source\Protobuf\Libs\Protobuf\include" ^
+    -DProtobuf_LIBRARIES="%UE_ROOT%\Engine\Plugins\AnteMotion\Protobuf\Source\Protobuf\Libs\Protobuf\x64\Release\libprotobuf.lib" ^
+	-DProtobuf_PROTOC_LIBRARY="%UE_ROOT%\Engine\Plugins\AnteMotion\Protobuf\Source\Protobuf\Libs\Protobuf\x64\Release\libprotoc.lib" ^
+	-DProtobuf_PROTOC_EXECUTABLE="%UE_ROOT%\Engine\Plugins\AnteMotion\Protobuf\Source\Protobuf\Libs\Protobuf\x64\Release\protoc.exe" ^
+	-DgRPC_ZLIB_PROVIDER=package ^
     -DZLIB_INCLUDE_DIR="%UE_ROOT%\Engine\Source\ThirdParty\zlib\v1.2.8\include\Win64\VS2015" ^
     -DZLIB_LIBRARY_DEBUG="%UE_ROOT%\Engine\Source\ThirdParty\zlib\v1.2.8\lib\Win64\VS2015\Debug\zlibstatic.lib" ^
     -DZLIB_LIBRARY_RELEASE="%UE_ROOT%\Engine\Source\ThirdParty\zlib\v1.2.8\lib\Win64\VS2015\Release\zlibstatic.lib" ^
@@ -53,13 +59,15 @@ call cmake .. -G "Visual Studio 16 2019" -A x64 ^
     -DSSL_EAY_DEBUG="%UE_ROOT%\Engine\Source\ThirdParty\OpenSSL\1.1.1\Lib\Win64\VS2015\Debug\libssl.lib" ^
     -DSSL_EAY_LIBRARY_DEBUG="%UE_ROOT%\Engine\Source\ThirdParty\OpenSSL\1.1.1\Lib\Win64\VS2015\Debug\libssl.lib" ^
     -DSSL_EAY_LIBRARY_RELEASE="%UE_ROOT%\Engine\Source\ThirdParty\OpenSSL\1.1.1\Lib\Win64\VS2015\Release\libssl.lib" ^
-    -DSSL_EAY_RELEASE="%UE_ROOT%\Engine\Source\ThirdParty\OpenSSL\1.1.1\Lib\Win64\VS2015\Release\libssl.lib"
+    -DSSL_EAY_RELEASE="%UE_ROOT%\Engine\Source\ThirdParty\OpenSSL\1.1.1\Lib\Win64\VS2015\Release\libssl.lib ^
+	
 call cmake --build . --target ALL_BUILD --config Release
 
 :COPY_HEADERS
 echo ">>>>>>>>>> copy headers"
-robocopy "%GRPC_ROOT%\include" "%GRPC_INCLUDE_DIR%\include" /E
-robocopy "%GRPC_ROOT%\third_party\protobuf\src" "%GRPC_INCLUDE_DIR%\third_party\protobuf\src" /E
+robocopy "%GRPC_ROOT%\include" "%GRPC_INCLUDE_DIR%\include" *.h *.inc /E
+robocopy "%GRPC_ROOT%\third_party\abseil-cpp\absl" "%GRPC_INCLUDE_DIR%\include\absl" *.h *.inc /E
+robocopy "%GRPC_ROOT%\third_party\protobuf\src" "%GRPC_INCLUDE_DIR%\third_party\protobuf\src" *.h *.inc /E
 
 :PATCH_HEADERS
 echo ">>>>>>>>>> copy headers"
@@ -72,6 +80,20 @@ robocopy "%CMAKE_BUILD_DIR%\third_party\cares\cares\lib\Release" "%GRPC_LIBRARIE
 robocopy "%CMAKE_BUILD_DIR%\third_party\benchmark\src\Release" "%GRPC_LIBRARIES_DIR%" *.lib /R:0 /S
 robocopy "%CMAKE_BUILD_DIR%\third_party\gflags\Release" "%GRPC_LIBRARIES_DIR%" *.lib /R:0 /S
 robocopy "%CMAKE_BUILD_DIR%\third_party\protobuf\Release" "%GRPC_LIBRARIES_DIR%" *.lib /R:0 /S
+robocopy "%CMAKE_BUILD_DIR%\third_party\abseil-cpp\absl\base\Release" "%GRPC_LIBRARIES_DIR%" *.lib /R:0 /S
+robocopy "%CMAKE_BUILD_DIR%\third_party\abseil-cpp\absl\container\Release" "%GRPC_LIBRARIES_DIR%" *.lib /R:0 /S
+robocopy "%CMAKE_BUILD_DIR%\third_party\abseil-cpp\absl\debugging\Release" "%GRPC_LIBRARIES_DIR%" *.lib /R:0 /S
+robocopy "%CMAKE_BUILD_DIR%\third_party\abseil-cpp\absl\flags\Release" "%GRPC_LIBRARIES_DIR%" *.lib /R:0 /S
+robocopy "%CMAKE_BUILD_DIR%\third_party\abseil-cpp\absl\hash\Release" "%GRPC_LIBRARIES_DIR%" *.lib /R:0 /S
+robocopy "%CMAKE_BUILD_DIR%\third_party\abseil-cpp\absl\numeric\Release" "%GRPC_LIBRARIES_DIR%" *.lib /R:0 /S
+robocopy "%CMAKE_BUILD_DIR%\third_party\abseil-cpp\absl\profiling\Release" "%GRPC_LIBRARIES_DIR%" *.lib /R:0 /S
+robocopy "%CMAKE_BUILD_DIR%\third_party\abseil-cpp\absl\random\Release" "%GRPC_LIBRARIES_DIR%" *.lib /R:0 /S
+robocopy "%CMAKE_BUILD_DIR%\third_party\abseil-cpp\absl\status\Release" "%GRPC_LIBRARIES_DIR%" *.lib /R:0 /S
+robocopy "%CMAKE_BUILD_DIR%\third_party\abseil-cpp\absl\strings\Release" "%GRPC_LIBRARIES_DIR%" *.lib /R:0 /S
+robocopy "%CMAKE_BUILD_DIR%\third_party\abseil-cpp\absl\synchronization\Release" "%GRPC_LIBRARIES_DIR%" *.lib /R:0 /S
+robocopy "%CMAKE_BUILD_DIR%\third_party\abseil-cpp\absl\time\Release" "%GRPC_LIBRARIES_DIR%" *.lib /R:0 /S
+robocopy "%CMAKE_BUILD_DIR%\third_party\abseil-cpp\absl\types\Release" "%GRPC_LIBRARIES_DIR%" *.lib /R:0 /S
+robocopy "%CMAKE_BUILD_DIR%\third_party\re2\Release" "%GRPC_LIBRARIES_DIR%" re2.lib /R:0 /S
 
 :COPY_PROGRAMS
 echo ">>>>>>>>>> copy programs"
