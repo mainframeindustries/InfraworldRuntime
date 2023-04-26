@@ -35,31 +35,25 @@ git submodule update --init
 
 :BUILD_ALL
 mkdir "%CMAKE_BUILD_DIR%" && cd "%CMAKE_BUILD_DIR%"
-call cmake .. -G "Visual Studio 16 2019" -A x64 ^
+call cmake .. -G "Visual Studio 17 2022" -A x64 ^
     -DCMAKE_CXX_STANDARD_LIBRARIES="Crypt32.Lib User32.lib Advapi32.lib" ^
     -DCMAKE_BUILD_TYPE=Release ^
     -DCMAKE_CONFIGURATION_TYPES=Release ^
-	-DgRPC_PROTOBUF_PROVIDER=package ^
-	-DgRPC_PROTOBUF_PACKAGE_TYPE=module ^
-	-DProtobuf_USE_STATIC_LIBS=ON ^
-	-DProtobuf_INCLUDE_DIR="%UE_ROOT%\Engine\Plugins\AnteMotion\Protobuf\Source\Protobuf\Libs\Protobuf\include" ^
-    -DProtobuf_LIBRARIES="%UE_ROOT%\Engine\Plugins\AnteMotion\Protobuf\Source\Protobuf\Libs\Protobuf\x64\Release\libprotobuf.lib" ^
-	-DProtobuf_PROTOC_LIBRARY="%UE_ROOT%\Engine\Plugins\AnteMotion\Protobuf\Source\Protobuf\Libs\Protobuf\x64\Release\libprotoc.lib" ^
-	-DProtobuf_PROTOC_EXECUTABLE="%UE_ROOT%\Engine\Plugins\AnteMotion\Protobuf\Source\Protobuf\Libs\Protobuf\x64\Release\protoc.exe" ^
+    -Dprotobuf_BUILD_TESTS=OFF ^
 	-DgRPC_ZLIB_PROVIDER=package ^
-    -DZLIB_INCLUDE_DIR="%UE_ROOT%\Engine\Source\ThirdParty\zlib\v1.2.8\include\Win64\VS2015" ^
-    -DZLIB_LIBRARY_DEBUG="%UE_ROOT%\Engine\Source\ThirdParty\zlib\v1.2.8\lib\Win64\VS2015\Debug\zlibstatic.lib" ^
-    -DZLIB_LIBRARY_RELEASE="%UE_ROOT%\Engine\Source\ThirdParty\zlib\v1.2.8\lib\Win64\VS2015\Release\zlibstatic.lib" ^
+    -DZLIB_INCLUDE_DIR="%UE_ROOT%\Engine\Source\ThirdParty\zlib\1.2.12\include" ^
+    -DZLIB_LIBRARY_DEBUG="%UE_ROOT%\Engine\Source\ThirdParty\zlib\1.2.12\lib\Win64\Debug\zlibstatic.lib" ^
+    -DZLIB_LIBRARY_RELEASE="%UE_ROOT%\Engine\Source\ThirdParty\zlib\1.2.12\lib\Win64\Release\zlibstatic.lib" ^
     -DgRPC_SSL_PROVIDER=package ^
-    -DLIB_EAY_LIBRARY_DEBUG="%UE_ROOT%\Engine\Source\ThirdParty\OpenSSL\1.1.1\Lib\Win64\VS2015\Debug\libcrypto.lib" ^
-    -DLIB_EAY_LIBRARY_RELEASE="%UE_ROOT%\Engine\Source\ThirdParty\OpenSSL\1.1.1\Lib\Win64\VS2015\Release\libcrypto.lib" ^
-    -DLIB_EAY_DEBUG="%UE_ROOT%\Engine\Source\ThirdParty\OpenSSL\1.1.1\Lib\Win64\VS2015\Debug\libcrypto.lib" ^
-    -DLIB_EAY_RELEASE="%UE_ROOT%\Engine\Source\ThirdParty\OpenSSL\1.1.1\Lib\Win64\VS2015\Release\libcrypto.lib" ^
-    -DOPENSSL_INCLUDE_DIR="%UE_ROOT%\Engine\Source\ThirdParty\OpenSSL\1.1.1\include\Win64\VS2015" ^
-    -DSSL_EAY_DEBUG="%UE_ROOT%\Engine\Source\ThirdParty\OpenSSL\1.1.1\Lib\Win64\VS2015\Debug\libssl.lib" ^
-    -DSSL_EAY_LIBRARY_DEBUG="%UE_ROOT%\Engine\Source\ThirdParty\OpenSSL\1.1.1\Lib\Win64\VS2015\Debug\libssl.lib" ^
-    -DSSL_EAY_LIBRARY_RELEASE="%UE_ROOT%\Engine\Source\ThirdParty\OpenSSL\1.1.1\Lib\Win64\VS2015\Release\libssl.lib" ^
-    -DSSL_EAY_RELEASE="%UE_ROOT%\Engine\Source\ThirdParty\OpenSSL\1.1.1\Lib\Win64\VS2015\Release\libssl.lib ^
+    -DLIB_EAY_LIBRARY_DEBUG="%UE_ROOT%\Engine\Source\ThirdParty\OpenSSL\1.1.1n\Lib\Win64\VS2015\Debug\libcrypto.lib" ^
+    -DLIB_EAY_LIBRARY_RELEASE="%UE_ROOT%\Engine\Source\ThirdParty\OpenSSL\1.1.1n\Lib\Win64\VS2015\Release\libcrypto.lib" ^
+    -DLIB_EAY_DEBUG="%UE_ROOT%\Engine\Source\ThirdParty\OpenSSL\1.1.1n\Lib\Win64\VS2015\Debug\libcrypto.lib" ^
+    -DLIB_EAY_RELEASE="%UE_ROOT%\Engine\Source\ThirdParty\OpenSSL\1.1.1n\Lib\Win64\VS2015\Release\libcrypto.lib" ^
+    -DOPENSSL_INCLUDE_DIR="%UE_ROOT%\Engine\Source\ThirdParty\OpenSSL\1.1.1n\include\Win64\VS2015" ^
+    -DSSL_EAY_DEBUG="%UE_ROOT%\Engine\Source\ThirdParty\OpenSSL\1.1.1n\Lib\Win64\VS2015\Debug\libssl.lib" ^
+    -DSSL_EAY_LIBRARY_DEBUG="%UE_ROOT%\Engine\Source\ThirdParty\OpenSSL\1.1.1n\Lib\Win64\VS2015\Debug\libssl.lib" ^
+    -DSSL_EAY_LIBRARY_RELEASE="%UE_ROOT%\Engine\Source\ThirdParty\OpenSSL\1.1.1n\Lib\Win64\VS2015\Release\libssl.lib" ^
+    -DSSL_EAY_RELEASE="%UE_ROOT%\Engine\Source\ThirdParty\OpenSSL\1.1.1n\Lib\Win64\VS2015\Release\libssl.lib ^
 	
 call cmake --build . --target ALL_BUILD --config Release
 
