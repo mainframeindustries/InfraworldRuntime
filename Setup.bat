@@ -11,7 +11,7 @@ set GRPC_PROGRAMS_DIR=%SCRIPT_FOLDER%\GrpcPrograms\Win64
 set CMAKE_BUILD_DIR=%GRPC_ROOT%\.build
 
 set REMOTE_ORIGIN=https://github.com/grpc/grpc.git
-set BRANCH=v1.54.x
+set BRANCH=v1.48.x
 ::#####################################VARS#############################################################################
 
 :GET_UE_ROOT
@@ -40,6 +40,7 @@ call cmake .. -G "Visual Studio 17 2022" -A x64 ^
     -DCMAKE_BUILD_TYPE=Release ^
     -DCMAKE_CONFIGURATION_TYPES=Release ^
     -Dprotobuf_BUILD_TESTS=OFF ^
+    -DCMAKE_CXX_STANDARD=17 ^
 	-DgRPC_ZLIB_PROVIDER=package ^
     -DZLIB_INCLUDE_DIR="%UE_ROOT%\Engine\Source\ThirdParty\zlib\1.2.12\include" ^
     -DZLIB_LIBRARY_DEBUG="%UE_ROOT%\Engine\Source\ThirdParty\zlib\1.2.12\lib\Win64\Debug\zlibstatic.lib" ^
@@ -53,7 +54,7 @@ call cmake .. -G "Visual Studio 17 2022" -A x64 ^
     -DSSL_EAY_DEBUG="%UE_ROOT%\Engine\Source\ThirdParty\OpenSSL\1.1.1n\Lib\Win64\VS2015\Debug\libssl.lib" ^
     -DSSL_EAY_LIBRARY_DEBUG="%UE_ROOT%\Engine\Source\ThirdParty\OpenSSL\1.1.1n\Lib\Win64\VS2015\Debug\libssl.lib" ^
     -DSSL_EAY_LIBRARY_RELEASE="%UE_ROOT%\Engine\Source\ThirdParty\OpenSSL\1.1.1n\Lib\Win64\VS2015\Release\libssl.lib" ^
-    -DSSL_EAY_RELEASE="%UE_ROOT%\Engine\Source\ThirdParty\OpenSSL\1.1.1n\Lib\Win64\VS2015\Release\libssl.lib ^
+    -DSSL_EAY_RELEASE="%UE_ROOT%\Engine\Source\ThirdParty\OpenSSL\1.1.1n\Lib\Win64\VS2015\Release\libssl.lib" ^
 	
 call cmake --build . --target ALL_BUILD --config Release
 
